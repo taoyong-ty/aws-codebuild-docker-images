@@ -1,6 +1,12 @@
 #!/bin/sh
 set -e
 
+if [ "$CODEBUILD_GPU_ENABLED" == "true" ]
+  mkdir -p /etc/docker
+  echo "{}" >> /etc/docker/daemon.json
+  nvidia-ctk runtime configure --runtime=docker
+fi
+
 /usr/local/bin/dockerd \
 	--host=unix:///var/run/docker.sock \
 	--host=tcp://127.0.0.1:2375 \
